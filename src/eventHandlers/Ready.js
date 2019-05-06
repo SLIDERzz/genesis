@@ -5,6 +5,8 @@ const Handler = require('../models/BaseEventHandler');
 const DynamicVoiceHandler = require('./DynamicVoiceHandler');
 const FeedsNotifier = require('../notifications/FeedsNotifier');
 
+const MessageManager = require('../settings/MessageManager');
+
 const { timeDeltaToMinutesString, fromNow } = require('../CommonFunctions');
 
 const max = {
@@ -57,6 +59,17 @@ async function checkPrivateRooms(self, shardId) {
       });
     }
   });
+}
+
+function forceGarbageCollection(logger) {
+  try {
+    if (global.gc) {
+      global.gc();
+      logger.warn('Garbage collection complete');
+    }
+  } catch (e) {
+    logger.error(e);
+  }
 }
 
 /**
@@ -114,7 +127,7 @@ class OnReadyHandle extends Handler {
    * @param {string}  event Event to trigger this handler
    */
   constructor(bot) {
-    super(bot, 'onReady', 'onReady');
+    super(bot, 'handlers.onReady', 'onReady');
     this.channelTimeout = 60000;
   }
 
@@ -145,6 +158,9 @@ class OnReadyHandle extends Handler {
         url: 'https://genesis.warframestat.us',
       },
     });
+
+    this.bot.MessageManager = new MessageManager(this.bot);
+
     await this.settings.ensureData(this.client);
     this.bot.readyToExecute = true;
 
@@ -153,6 +169,9 @@ class OnReadyHandle extends Handler {
     setInterval(updatePresence, 60000, self);
     this.bot.dynamicVoiceHandler = new DynamicVoiceHandler(this.client, this.logger, this.settings);
     this.bot.feedNotifier = new FeedsNotifier(this.bot);
+    if (global.gc) {
+      this.bot.gcInterval = setInterval(forceGarbageCollection, 3600000, this.logger);
+    }
   }
 }
 

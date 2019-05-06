@@ -3,6 +3,15 @@
 const Handler = require('../models/BaseEventHandler');
 const I18n = require('../settings/I18n');
 
+/**
+ * Checks if the command is callable,
+ * checking if the user has authorization, if custom is allowed
+ * @param  {Boolean} hasAuth     whether or not the caller has authorization
+ * @param  {Boolean} allowCustom whether or not custom commands are allowed
+ * @param  {Boolean}  allowInline whether or not inline commands are allowed
+ * @param  {Command}  command     the command manifest
+ * @return {Boolean}              whether or not the settings allow this command to be called
+ */
 const checkInlineCustom = (hasAuth, allowCustom, allowInline, command) => {
   if ((command.isCustom && allowCustom) || (command.isInline && allowInline)) {
     return hasAuth;
@@ -161,6 +170,8 @@ class CommandHandler extends Handler {
           }
         }
       }
+      // force last index to 0 for any global checkers
+      command.regex.lastIndex = 0;
     });
   }
 

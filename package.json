@@ -7,7 +7,6 @@
     "test": "npx eslint main.js src/",
     "build-docs": "node_modules/.bin/jsdoc -t ./node_modules/ink-docstrap/template -c .github/docs/jsdoc.conf -R README.md -r main.js src/. -d docs",
     "start": "pm2 start genesis.json && pm2 logs genesis",
-    "preinstall": "npm i -g pm2",
     "restart": "pm2 delete genesis && pm2 start genesis.json && pm2 logs genesis",
     "stop": "pm2 delete genesis",
     "logs": "pm2 logs genesis",
@@ -32,7 +31,7 @@
   ],
   "author": "warframe-community-developers",
   "contributors": [
-    "tobitenno <tobiah@protonmail.com> (https://github.com/tobitenno)",
+    "tobitenno <tobiah@warframe.gg> (https://github.com/tobitenno)",
     "nspacestd (https://github.com/nspacestd)"
   ],
   "dependencies": {

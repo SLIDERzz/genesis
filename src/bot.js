@@ -80,12 +80,6 @@ class Genesis {
     this.token = discordToken;
 
     /**
-     * Discord.js API
-     * @type {Discord}
-     */
-    this.discord = Discord;
-
-    /**
      * The logger object
      * @type {Logger}
      * @private
@@ -226,7 +220,7 @@ class Genesis {
   async start() {
     await this.settings.createSchema(this.client);
     this.logger.debug('Schema created');
-    await this.commandManager.loadCommands();
+    await this.commandManager.loadCustomCommands();
     await this.eventHandler.loadHandles();
 
     this.setupHandlers();

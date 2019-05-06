@@ -15,20 +15,21 @@ class Logger {
    */
   constructor(ravenClient) {
     this.ravenClient = ravenClient;
+    this.logLevel = process.env.LOG_LEVEL || 'ERROR';
   }
 }
-const logLevel = process.env.LOG_LEVEL || 'ERROR';
+
 const levels = [
   'DEBUG',
   'INFO',
-  'WARNING',
+  'WARN',
   'ERROR',
   'FATAL',
 ];
 
 levels.forEach((level) => {
   Logger.prototype[level.toLowerCase()] = (message) => {
-    if ((levels.indexOf(level) >= levels.indexOf(logLevel)) && levels.indexOf(level) < 3) {
+    if ((levels.indexOf(level) >= levels.indexOf(this.logLevel)) && levels.indexOf(level) < 3) {
       if (level.toLowerCase() === 'debug') {
         const verboseMsg = `[${level}] ${message}`;
         if (`[${level}] "${message}"` !== verboseMsg) {
