@@ -150,14 +150,6 @@ class OnReadyHandle extends Handler {
         }],
       });
     }
-    this.client.user.setPresence({
-      status: 'online',
-      afk: false,
-      activity: {
-        name: `@${this.client.user.username} help`,
-        url: 'https://genesis.warframestat.us',
-      },
-    });
 
     this.bot.MessageManager = new MessageManager(this.bot);
 

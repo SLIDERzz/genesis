@@ -1,6 +1,6 @@
 'use strict';
 
-const Discord = require('discord.js');
+const { Client, ShardClientUtil } = require('discord.js');
 const md = require('node-md-config');
 
 const WorldStateCache = require('./WorldStateCache');
@@ -59,14 +59,33 @@ class Genesis {
      * @type {Discord.Client}
      * @private
      */
-    this.client = new Discord.Client({
+    this.client = new Client({
       fetchAllMembers: false,
       ws: {
         compress: true,
       },
       shards: shardId,
       totalShardCount: shardCount,
-      retryLimit: 2,
+      retryLimit: 1,
+      disabledEvents: [
+        'VOICE_SERVER_UPDATE',
+        'PRESENSE_UPDATE',
+        'USER_SETTINGS_UPDATE',
+        'GUILD_INTEGRATIONS_UPDATE',
+        'GUILD_EMOJIS_UPDATE',
+        'GUILD_UPDATE',
+        'CHANNEL_PINS_UPDATE',
+      ],
+      restSweepInterval: 20,
+      messageSweepInterval: 3600,
+      messageCacheLifetime: 3600,
+      presence: {
+        status: 'dnd',
+        afk: false,
+        activity: {
+          name: `Starting... (${shardId})`,
+        },
+      },
     });
 
     this.shardId = shardId;
@@ -124,7 +143,7 @@ class Genesis {
      * Shard client for communicating with other shards
      * @type {Discord.ShardClientUtil}
      */
-    this.shardClient = new Discord.ShardClientUtil(this.client);
+    this.shardClient = new ShardClientUtil(this.client);
 
     /**
      * Persistent storage for settings

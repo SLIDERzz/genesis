@@ -27,12 +27,12 @@ class Reload extends Command {
   async run(message) {
     this.logger.debug('Reloading modules');
     const precache = Object.keys(this.commandManager.commandCache);
-    
+
     // decache processes
     const commandDir = path.join(__dirname, '../commands');
     this.commandManager.commands
       .filter(command => precache.includes(command.id))
-      .forEach(command => {
+      .forEach((command) => {
         try {
           decache(path.join(commandDir, command.path));
           this.logger.debug(`Decached ${command.id} @ ${command.path}`);
@@ -40,7 +40,7 @@ class Reload extends Command {
           this.logger.error(`Could not decache ${command.id} @ ${command.path}`);
         }
       });
-    
+
     delete this.commandManager.commandCache;
     this.commandManager.commandCache = {};
 

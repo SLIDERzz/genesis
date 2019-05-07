@@ -48,7 +48,9 @@ class MessaageManager {
    * @param  {boolean}                delRes          delete the response after sending
    * @returns {Promise.<Discord.Message>}              Message Promise
    */
-  async send(target, content = '', { msgOpts, delCall, delRes, deleteAfter, message } = defMsgOpts) {
+  async send(target, content = '', {
+    msgOpts, delCall, delRes, deleteAfter, message,
+  } = defMsgOpts) {
     if (!target) {
       this.logger.error('Cannot call #send without a target.');
       return undefined;
@@ -84,7 +86,7 @@ class MessaageManager {
   }
 
   async sendMessage(message, content, delCall, delRes) {
-    return this.send(message.channel, content, {delCall, delRes, message});
+    return this.send(message.channel, content, { delCall, delRes, message });
   }
 
   /**
@@ -99,7 +101,9 @@ class MessaageManager {
    *                                                     a messsage after
    * @returns {Promise.<Discord.Message>}              Message Promise
    */
-  async reply(message, content = '', { msgOpts, delCall = false, delRes = false, deleteAfter } = defMsgOpts) {
+  async reply(message, content = '', {
+    msgOpts, delCall = false, delRes = false, deleteAfter,
+  } = defMsgOpts) {
     if (!message.channel) {
       this.logger.error('Cannot call #send without a target.');
       return undefined;
